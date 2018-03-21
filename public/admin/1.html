@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+  <title>summernote</title>
+  <!-- include jquery -->
+	<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+  
+  <link href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="__PUBLIC__/../Admin/css/default.css">
+  <link href="__PUBLIC__/../Admin/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+
+  <!-- include libraries BS3 -->
+	<!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" />-->
+	
+	<script src="//cdn.bootcss.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+	<link href="//cdn.bootcss.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+ 
+  <!-- include summernote -->
+  <link rel="stylesheet" href="__PUBLIC__/../summernote/dist/summernote.css">
+  <script type="text/javascript" src="__PUBLIC__/../summernote/dist/summernote.js"></script>
+	<script src="__PUBLIC__/../summernote/lang/summernote-zh-CN.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var IMAGE_PATH = 'http://gamersea.tpddns.cn:777/';
+
+			$('#summernote').summernote({
+				height: 300,
+				lang:'zh-CN',
+				callbacks : {
+					onImageUpload: function(file) {
+						uploadImage(file[0]);
+						//console.log(file[0]);
+					}
+				}
+			});
+
+			function uploadImage(file) {
+				var data = new FormData();
+				data.append("photo",file);
+				//console.log(data);
+				$.ajax ({
+					data: data,
+					type: "POST",
+					url: "{:U('Admin/uploadpic')}",
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(url) {
+					//	alert(url);
+						var image = IMAGE_PATH + url;
+						$('#summernote').summernote('insertImage', image);
+					//	console.log(image);
+					},
+					error: function(data) {
+						console.log(data);
+					}
+				});
+			}
+		});
+	</script>
+
+    <script src="__PUBLIC__/../Admin/js/fileinput.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/../Admin/js/fileinput_locale_zh.js" type="text/javascript"></script>
+   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" type="text/javascript"></script>-->
+
+</head>
+<body>
+<div class="htmleaf-container">
+		<header class="htmleaf-header">
+			<h1>游民海洋 <span>在游戏的海洋中欢快的畅游</span></h1>
+			<a class="glyphicon glyphicon-home" aria-hidden="true"  href="__APP__" title="游民海洋"></a>
+			&nbsp;
+			<a class="glyphicon glyphicon-trash" aria-hidden="true"  href="singleoperate" title="文章管理"></a>
+
+		</header>
+
+
+		<!--<div class="htmleaf-content bgcolor-8">
+			
+		</div>-->
+		<div class="container kv-main">
+            <div class="page-header">
+            <h2>游戏资料管理中心 <small></h2>
+            </div>
+            <form enctype="multipart/form-data" action="admin" method="post">
+				
+				<p class="help-inline">游戏标题：</p><input id="file-0b" class="text" type="text" name="title" >
+				<br>
+				<span class="help-inline">游戏图片：</span>
+				<input id="file-0a" class="file" type="file" multiple data-min-file-count="1" name="photo">
+                <br>
+				<p class="help-inline">游戏内容：</p>
+				<textarea class="summernote" id="summernote" name="summernote"></textarea>
+				<br>
+
+                
+                <button type="submit" class="btn btn-primary" id="click">提交</button>
+                <button type="reset" class="btn btn-default">重置</button>
+
+            </form>
+
+          <!--  <script>
+			$("#file-0a").fileinput({
+	        'allowedFileExtensions' : ['jpg', 'png','gif','jpeg'],
+			showUpload: true,
+			//showCaption: true,
+			//browseClass: "btn btn-primary btn-lg",
+			//fileType: "any",
+	        previewFileIcon: "<i class='glyphicon glyphicon-king'></i>"
+	    });
+			</script>-->
+
+        </div>
+	<script>
+
+		/*$(document).ready(function(){
+			$('#click').click(function(){
+				var note = $('.summernote').summernote('code');
+				var file = $('#file-0a').val();
+				var text = $('#file-0b').val();
+				$.ajax({
+					type:'post',
+					url:'admin',
+					data:'note='+note,
+					success:function(msg){
+						alert(msg);
+					}
+				});
+			});
+		});*/
+		/*$(document).ready(function() {
+			$('#click').click(function(){
+				alert('aa');
+			$('.summernote').summernote({
+				onImageUpload: function(files, editor, welEditable) {
+					sendFile(files[0],editor,welEditable);
+				}
+			});
+			});
+		});
+
+		function sendFile(file,editor,welEditable) {
+			data = new FormData();
+			data.append("file", file);
+			alert(data);
+			$.ajax({
+				data: data,
+				type: "POST",
+				url: admin,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function(data) {
+					alert(data);
+					editor.insertImage(welEditable, data.url);
+				}
+			});
+		}*/
+	</script>
+</body>
+</html>
